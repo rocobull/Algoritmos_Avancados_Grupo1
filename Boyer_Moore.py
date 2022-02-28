@@ -7,18 +7,40 @@ Created on Mon Feb 28 02:02:52 2022
 
 import re
 
+
+"""
+Class: BoyerMoore
+"""
+
+
 class BoyerMoore:
+    """
+    Implementa o algoritmo de Boyer-Moore para a procura de padrões em
+    sequências
+    """
     
-    def __init__(self,alphabet,pattern):
-        self.alpha = alphabet
-        self.pat = pattern
+    def __init__(self, alphabet:str, pattern:str):
+        """
+        Gurada o alphabeto e padrão introduzidos, e chama os métodos 'bcr' e 'gsr'
+        
+        Parameters
+        ----------
+        :param alphabet: O alphabeto utilizado no padrão e texto a processar
+        
+        :param pattern: O padrão a ser procurado no texto
+        """
+        self.alpha = alphabet.upper()
+        self.pat = pattern.upper()
         
         self.bcr()
         self.gsr()
         
     
     def bcr(self):
-        
+        """
+        Implementa o 'Bad Character Rule' e prepara um dicionário de deslocações
+        para cada posição do padrão definido
+        """
         self.salto_bcr = {ind:{} for ind in range(len(self.pat))}
         
         for letter in self.alpha:
@@ -36,7 +58,10 @@ class BoyerMoore:
                     
     
     def gsr(self):
-        
+        """
+        Implementa o 'Good Suffix Rule' e prepara um dicionário de deslocações
+        para cada posição do padrão definido
+        """
         self.salto_gsr = {self.pat[ind:] : 0 for ind in range(1,len(self.pat))}
         
         for ind,sub in enumerate(self.salto_gsr):
@@ -55,10 +80,17 @@ class BoyerMoore:
             
                 
                 
-    def procura(self,texto):
+    def procura(self, texto:str) -> list:
+        """
+        Devolve uma lista de índices do texto onde foram encontrados correspondências
+        exatas do padrão.
         
+        Parameters
+        ----------
+        :param texto: String onde se pretende procurar ocorrências do padrão
+        """
         dots = "."*len(self.pat)
-        subseqs = re.findall(fr"(?=({dots}))", texto)
+        subseqs = re.findall(fr"(?=({dots}))", texto.upper())
         results = []
         ind = 0
         while ind < len(subseqs):
@@ -86,6 +118,5 @@ class BoyerMoore:
 
 a='ATCG'
 p='ATTTTG'
-p="A"
 B=BoyerMoore(a,p) 
 print(B.procura('ATATATGGGTGATTTTGGGTAATTTTG'))
