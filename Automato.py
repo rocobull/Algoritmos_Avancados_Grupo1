@@ -24,12 +24,13 @@ class Automato:
         Parameters
         ----------
         :param alphabet: O alphabeto utilizado no padrão e texto a processar
-        
         :param pattern: O padrão a ser procurado no texto
         """
-        self.alphabet = alphabet.upper()
-        self.pattern = " " + pattern.upper()
-        self.parts = [self.pattern[0:num] for num in range(1, len(self.pattern)+1)]
+        assert all(elem in alphabet.upper() for elem in set(pattern.upper())), "Padrão contém elementos não presentes no alphabeto"
+        
+        self.alpha = alphabet.upper()
+        self.pattern = " " + pattern.upper() #O espaço é considerado o estado 0, antes do primeiro match com o padrão
+        self.parts = [self.pattern[:num] for num in range(1, len(self.pattern)+1)]
         self.mat = {num:{} for num in range(len(self.pattern))}
         self.transicoes()
         
@@ -43,15 +44,13 @@ class Automato:
         ----------
         :param key: A chave correspondente ao estado do automato no dicionário
                     de mudanças de estado
-        
         :param part: Um padrão encontrado num determinado estado
         """
         state = 0
         for sub in [part[ind:] for ind in range(1,key+2)]:
             if " "+sub in self.parts:
                 state = self.parts.index(" "+sub)
-                self.mat[key][part[-1]] = state
-                return True
+                break
             
         self.mat[key][part[-1]] = state
     
@@ -62,7 +61,7 @@ class Automato:
         caractere encontrado em cada estado
         """
         for key in self.mat:
-            for al in self.alphabet:
+            for al in self.alpha:
                 
                 if key != len(self.pattern)-1:
                     if al == self.pattern[key+1]:
@@ -84,6 +83,10 @@ class Automato:
         ----------
         :param text: String onde se pretende procurar ocorrências do padrão
         """
+        assert all(elem in self.alpha for elem in set(texto.upper())), "Parâmetro 'texto' contém elementos não presentes no alphabeto"
+        
+        if len(self.pattern) == 1:
+            return []
         state = 0
         results = []
         for ind,elem in enumerate(texto.upper()):
@@ -97,20 +100,20 @@ class Automato:
         """
         Imprime o Automato de forma legível (matriz)
         """
-        print("\t".join(["State", *self.alphabet]))
+        print("\t".join(["State", *self.alpha]))
         for k in self.mat:
             line = [str(k)]
-            for al in self.alphabet:
+            for al in self.alpha:
                 line.append(str(self.mat[k][al]))
             print(line[0] + "\t\t" + "\t".join(line[1:]))
-                
+            
         
 alpha = "ACGT"                
-pattern = "ACA"
-seq = "TTTTACAACACACAAATGGAACA"
+pattern = "TAGACAT"
+seq = "TAGACATATATAGACATAAATCGATCATGCTACGTACAGTAGACATATCAGTAGACAT"
 
 
-x = Automato(alpha, pattern)
-print(x.af(seq))
-print()
+x = Automato(alpha,pattern)
 x.print_automato()
+print()
+print(x.af(seq))

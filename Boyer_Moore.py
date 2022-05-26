@@ -26,15 +26,22 @@ class BoyerMoore:
         Parameters
         ----------
         :param alphabet: O alphabeto utilizado no padrão e texto a processar
-        
         :param pattern: O padrão a ser procurado no texto
         """
-        self.alpha = alphabet.upper()
+        assert all(elem in alphabet for elem in set(pattern.upper())), "Padrão contém elementos não presentes no alphabeto"
+        assert len(pattern) > 0, "Padrão tem de ter tamanho > 0"
+
+        self.alpha = "".join(set(alphabet.upper()))
         self.pat = pattern.upper()
         
         self.bcr()
         self.gsr()
+        #print(self.salto_bcr)
+        #print()
+        #print(self.salto_gsr)
         
+    
+    
     
     def bcr(self):
         """
@@ -64,7 +71,7 @@ class BoyerMoore:
         """
         self.salto_gsr = {self.pat[ind:] : 0 for ind in range(1,len(self.pat))}
         
-        for ind,sub in enumerate(self.salto_gsr):
+        for sub in self.salto_gsr:
             fragmentos = [sub[i:] for i in range(len(sub))]
             salto = len(self.pat)
             
@@ -80,7 +87,7 @@ class BoyerMoore:
             
                 
                 
-    def procura(self, texto:str) -> list:
+    def procura(self, texto:str, pat_in_pat:bool = True) -> list:
         """
         Devolve uma lista de índices do texto onde foram encontrados correspondências
         exatas do padrão.
@@ -88,7 +95,10 @@ class BoyerMoore:
         Parameters
         ----------
         :param texto: String onde se pretende procurar ocorrências do padrão
+        :param pat_in_pat: Booleano que indica se se deve procurar o padrão quando se sobrepõe
         """
+        assert all(elem in self.alpha for elem in set(texto.upper())), "Parâmetro 'texto' contém elementos não presentes no alphabeto" 
+        
         dots = "."*len(self.pat)
         subseqs = re.findall(fr"(?=({dots}))", texto.upper())
         results = []
@@ -96,14 +106,17 @@ class BoyerMoore:
         while ind < len(subseqs):
             if subseqs[ind] == self.pat:
                 results.append(ind)
-                ind += len(self.pat)
+                if pat_in_pat:
+                    ind += 1
+                else:
+                    ind += len(self.pat)
             else:
                 mismatch = len(self.pat)-1
                 while self.pat[mismatch] == subseqs[ind][mismatch]:
                     mismatch -= 1
                 
                 letra = subseqs[ind][mismatch]
-                if mismatch == len(self.pat)-1:
+                if mismatch == len(self.pat)-1: #Não existe "Good Suffix" neste caso
                     ind += self.salto_bcr[mismatch][letra]
                 else:
                     suffix = subseqs[ind][mismatch+1:]
@@ -111,12 +124,9 @@ class BoyerMoore:
                     
         return results
             
-        
-        
-        
-            
 
-a='ATCG'
-p='ATTTTG'
+a='ACGT'
+p='ACGACGAC'
 B=BoyerMoore(a,p) 
-print(B.procura('ATATATGGGTGATTTTGGGTAATTTTG'))
+#print(B.procura('ATCGTCAGGACATCGATAATCAGGACTCAGGAC'))
+print(B.procura('aggacgacgacTGACGACCGATATCAGTGACGACAGAGACTGACGAC'))
