@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from class_burrows_wheeler import BurrowsWheeler
+from BurrowsWheeler import BurrowsWheeler
 import unittest
 
 

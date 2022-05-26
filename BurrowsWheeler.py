@@ -108,4 +108,4 @@ class BurrowsWheeler:
 			paths += [[self.path_dic[c] for c in paths[ct - 1] if self.path_dic[c][0] == sub[ct]]]
 			ct += 1
 		pos = [(self.offsets[self.first_ind.index(c)] - (len(sub)-1)) for c in paths[-1]]
-		return pos[::-1]
+		return sorted(pos)
