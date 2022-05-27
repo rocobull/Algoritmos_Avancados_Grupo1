@@ -13,7 +13,7 @@ from MyMotifs import MyMotifs
 import random
  #gera números aleatórios
 
-class Motif_Consensus:
+class MotifFinding:
     """
     Implementa 2 tipos(heuristico e heuristico estocástico)  de procura de motifs, por consensus.
     """
@@ -316,40 +316,3 @@ class Motif_Consensus:
             else:
                 melhorar_s = False
         return s
-    
-    
-
-def Test():
-    random.seed(5)
-    seq1 = MySeq("ATAGAGCATAGA","dna")
-    seq2 = MySeq("ACGATAGATGA","dna")
-    seq3 = MySeq("AAGATAGGGG","dna")
-    seq4 = MySeq("AAGACTTAGGGG","dna")
-    mf = Motif_Consensus(4,[seq1,seq2,seq3,seq4])
-    print ("Heuristic consensus: ")
-    sol1 = mf.Heuristic()
-    print ("Index List: " , sol1)
-    print ("Score:" , mf.score(sol1,0.5))
-    print ("Score mult:" , mf.scoreMult(sol1))
-    print("Heuristic stochastic")
-    sol = mf.HeuristicStochastic()
-    print ("Score:" , mf.scoreMult(sol, 0.5))
-    print(mf.re_motif(sol))
-    print ("Solution: " , sol)
-    print ("Branch and Bound:")
-    sol2 = mf.branchAndBound()
-    print ("Solution: " , sol2)
-    
-def test5():
-    
-    mf = Motif_Consensus()
-    mf.readFile("exemploMotifs.txt","dna")
-    print("Heuristic stochastic")
-    sol = mf.HeuristicStochastic(pseudo=0.001)
-    print ("Solution: " , sol)
-    print ("Score:" , mf.score(sol, 0.001))
-    print ("Score mult:" , mf.scoreMult(sol, pseudo=0.001))
-    print("Consensus:", mf.createMotifFromIndexes(sol).consensus())
-    
-
-Test()
