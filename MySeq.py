@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+"""
+Class: MySeq
+"""
+
 class MySeq:
 
     def __init__(self, seq:str , tipo:str ="dna"):
@@ -60,5 +66,4 @@ class MySeq:
         elif (self.tipo=="rna"): return "ACGU"
         elif (self.tipo=="protein"): return "ACDEFGHIKLMNPQRSTVWY"
         else: return None
-        
-
+    
