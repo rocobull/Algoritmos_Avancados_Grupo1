@@ -4,7 +4,7 @@ Created on Sun May 15 17:30:41 2022
 
 @author: rober
 """
-from Boyer_Moore import BoyerMoore
+from BoyerMoore import BoyerMoore
 import unittest
 
 class TestBoyerMoore(unittest.TestCase):
