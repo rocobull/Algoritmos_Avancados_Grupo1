@@ -78,7 +78,7 @@ class BoyerMoore:
             for frag in fragmentos:
                 dots = "."*len(frag)
                 check_list = re.findall(fr"(?=({dots}))", self.pat)
-                check_list = check_list[:-1-(len(sub)-len(frag))] #Excluir os que estão apenas contidos no match inteiro
+                check_list = check_list[:-1]
                 if frag in check_list:
                     salto = check_list[::-1].index(frag) + len(sub) - len(frag) + 1 #Para alinhar com a correspondência
                     break
