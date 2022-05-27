@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun May 15 17:30:41 2022
 
-@author: vania
-"""
 from MotifFinding import MotifFinding
 from MySeq import MySeq
 import unittest
