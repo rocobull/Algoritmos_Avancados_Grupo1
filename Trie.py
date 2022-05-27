@@ -117,10 +117,3 @@ class Trie:
             for res in self.prefix_trie_match(suf):
                 result.append((res, ix))
         return result
-    
-    
-x = Trie()
-x.insert_pat(["ACGT","AAAAAT", "T", "CGAT", "TA"])
-x.get_seqs()
-x.trie_matches("CGATTACTATCGACGACATCATGC")
-print(x)
