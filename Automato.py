@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
+
 """
 Class: Automato
 """
-
 
 class Automato:
     """
