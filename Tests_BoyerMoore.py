@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun May 15 17:30:41 2022
 
-@author: rober
-"""
 from BoyerMoore import BoyerMoore
 import unittest
 
