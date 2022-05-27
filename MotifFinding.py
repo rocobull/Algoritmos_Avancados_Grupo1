@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sat May 21 14:34:03 2022
-
-@author: Vania
-"""
 
 """
-Class: Consensus
+Class: MotifFinding
 """
+
 from MySeq import MySeq
 from MyMotifs import MyMotifs
 import random
