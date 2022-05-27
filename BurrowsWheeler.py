@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Class: BurrowsWheeler1
+Class: BurrowsWheeler
 """
 
 class BurrowsWheeler:
