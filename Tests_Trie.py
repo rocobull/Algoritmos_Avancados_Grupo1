@@ -9,7 +9,7 @@ from Trie import Trie
 import numpy as np
 import unittest
 
-class TestAutomato(unittest.TestCase):
+class Tests_Trie(unittest.TestCase):
     
     def test_trie(self):
         test = Trie()
