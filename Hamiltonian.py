@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+Class: Hamiltonian
+"""
+
 from typing import Union
 
 class Hamiltonian:
