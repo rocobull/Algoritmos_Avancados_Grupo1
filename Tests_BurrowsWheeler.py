@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-
+"""
+Class: TestBurrowsWheeler1
+"""
 from BurrowsWheeler import BurrowsWheeler
 import unittest
 
