@@ -5,6 +5,7 @@ Class: Entity
 """
 
 import random
+
 class Entity:
 
 	"""
