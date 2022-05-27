@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""
+Class: DeBruijn
+"""
+
 from typing import Union
 
 class DeBruijn:
