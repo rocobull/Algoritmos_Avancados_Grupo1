@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+
 """
-Class: Evolutionary
+Class: Entity
 """
+
 import random
 class Entity:
 
@@ -29,6 +31,9 @@ class Entity:
 		if not self.genes:
 			self.genes = [random.uniform(lb, ub) for i in range(size*4)]
 
+"""
+Class: Evolutionary
+"""
 
 class Evolutionary:
 
@@ -209,7 +214,3 @@ class Evolutionary:
 		positions = sorted_indivs[-1].positions
 		motifs = [self.alignment[i][pos:pos+self.size_indiv] for i, pos in enumerate(positions)]
 		return motifs
-
-if __name__ == "__main__":
-	evol = Evolutionary(num_indivs = 12, size_indiv = 6, num_iter = 20, alignment = "seqs.txt")
-	print(f"motifs: {evol.get_motifs()}")
