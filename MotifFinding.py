@@ -7,7 +7,6 @@ Class: MotifFinding
 from MySeq import MySeq
 from MyMotifs import MyMotifs
 import random
- #gera números aleatórios
 
 class MotifFinding:
     """
