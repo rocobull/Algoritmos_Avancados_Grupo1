@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
+import re
+
 """
 Class: BoyerMoore
 """
-
-import re
 
 class BoyerMoore:
     """
