@@ -259,7 +259,7 @@ class MotifFinding:
         # Considerando apenas as duas primeiras sequências, escolher as 
         # posições iniciais s1 e s2 que dão um melhor score
         # procura exaustiva nas duas primeiras sequências
-        MC = Motif_Consensus(self.motifSize, self.seqs[:2])
+        MC = MotifFinding(self.motifSize, self.seqs[:2])
         s = MC.exhaustiveSearch()
         #obtem-se os indices dos motifs das 2 primeiras seq
         #Para cada uma das sequências seguintes (i=3, …,t), 
