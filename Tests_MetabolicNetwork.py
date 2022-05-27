@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed May 25 09:56:06 2022
-
-@author: rober
-"""
 
 from MetabolicNetwork import MetabolicNetwork
 import unittest
