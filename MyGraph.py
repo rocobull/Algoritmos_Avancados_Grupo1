@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-## Graph represented as adjacency list using a dictionary
-## keys are vertices
-## values of the dictionary represent the list of adjacent vertices of the key node
+"""
+Class: MyGraph
+"""
 
 import math
 from typing import Union
