@@ -1,17 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb 28 02:02:52 2022
-
-@author: rober
-"""
-
-import re
-
-
 """
 Class: BoyerMoore
 """
 
+import re
 
 class BoyerMoore:
     """
@@ -123,10 +114,3 @@ class BoyerMoore:
                     ind += max(self.salto_bcr[mismatch][letra], self.salto_gsr[suffix])
                     
         return results
-            
-
-a='ACGT'
-p='ACGACGAC'
-B=BoyerMoore(a,p) 
-#print(B.procura('ATCGTCAGGACATCGATAATCAGGACTCAGGAC'))
-print(B.procura('aggacgacgacTGACGACCGATATCAGTGACGACAGAGACTGACGAC'))
