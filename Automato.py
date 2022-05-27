@@ -1,14 +1,6 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb 28 02:03:56 2022
-
-@author: rober
-"""
-
 """
 Class: Automato
 """
-
 
 
 class Automato:
@@ -106,14 +98,3 @@ class Automato:
             for al in self.alpha:
                 line.append(str(self.mat[k][al]))
             print(line[0] + "\t\t" + "\t".join(line[1:]))
-            
-        
-alpha = "ACGT"                
-pattern = "TAGACAT"
-seq = "TAGACATATATAGACATAAATCGATCATGCTACGTACAGTAGACATATCAGTAGACAT"
-
-
-x = Automato(alpha,pattern)
-x.print_automato()
-print()
-print(x.af(seq))
