@@ -3,6 +3,9 @@
 import random
 import re
 
+"""
+Class: PWM
+"""
 
 class PWM:
 
@@ -69,7 +72,10 @@ class PWM:
 		subseqs = re.findall(fr"(?=(.{{{len(self.pwm)}}}))", seq)
 		return [self.__subseq_prob(subseq) for subseq in subseqs]
 
-
+"""
+Class: GibbsSampling
+"""
+	
 class GibbsSampling:
 
 	"""
