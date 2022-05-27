@@ -1,5 +1,5 @@
-from class_evolutionary_v1 import Entity
-from class_evolutionary_v1 import Evolutionary
+from Evolutionary import Entity
+from Evolutionary import Evolutionary
 import unittest
 import random 
 
