@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from Evolutionary import Entity
 from Evolutionary import Evolutionary
 import unittest
