@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Mar 14 00:13:03 2022
-
-@author: rober
+Class: SuffixTree
 """
 
 import pprint
@@ -103,8 +100,3 @@ class SuffixTree:
                 return False
             dic = dic[s]
         return self.get_leafs_below(dic)
-    
-x = SuffixTree("ABABBCAB")
-print(x.find_pat("AB"))
-print()
-print(x)
