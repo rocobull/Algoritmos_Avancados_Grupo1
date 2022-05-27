@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-@author: miguelrocha
-"""
 
 def createMatpwm(nl:int, nc:int, pseudo: float=1)->list:
     """
@@ -23,6 +20,12 @@ def printMat(mat:list):
     Devolve a matriz formatada 
     """
     for i in range(0, len(mat)): print(mat[i])
+
+        
+        
+"""
+Class: MyMotif
+"""
 
 class MyMotifs:
 
