@@ -118,14 +118,6 @@ class MyGraph:
             else:
                 print (v, " -> ", list(self.graph[v]))
                 
-    # def print_orig_graph(self):
-    #     """
-    #     Imprime o grafo original (caso tenha ocorrido alterações na estrutura do mesmo)
-    #     """
-    #     self.temp = self.graph
-    #     self.graph = self.orig_graph
-    #     self.print_graph()
-    #     self.graph = self.temp
 
     ## get basic info
 
@@ -512,84 +504,11 @@ class MyGraph:
             if d in marked:
                 return self.__get_path(djkstr, o, d)
             else:
-                return False
-
-
-
-#     def __get_mins(self, dist:int, nxt_list:list) -> tuple:
-#         """
-#         Método auxiliar de dijkstra() que retorna um tuplo com os valores da menor distância e os nodos para os quais 
-#         esta se verifica.
-        
-#         Parameters
-#         ----------
-#         :param distances: Dicionário de distâncias
-#         """
-#         res = []
-#         print(nxt_list)
-#         for nxt,prev,d in nxt_list:
-#             new_dist = dist + self.graph[prev][nxt]
-#             print(prev,nxt,new_dist)
-#             if new_dist < d:
-#                 res.append((nxt,prev,new_dist))
-#         return sorted(res, key = lambda x: x[2])
-
-
-#     def __get_path(self, djkstr:dict, o:int, d:int) -> str:
-#         """
-# 		Método auxiliar de dijkstra() que retorna o caminho mais curto entre o nodo de origem e o nodo de destino
-# 		de forma legível.
-
-# 		Parameters
-# 		----------
-# 		:param djkstr: O dicionário de distâncias
-# 		:param o: Nodo de origem
-# 		:param d: Nodo de destino
-# 		"""
-#         node = d
-#         path = [str(d)]
-#         while node != o:
-#             node = djkstr[node][0]
-#             path.insert(0, str(node))
-#         return path
-    
-    
-#     def dijkstra(self, o:int, d:int) -> list:
-#         """
-# 		Devolve o caminho mais curto entre 2 nodos implmentando do algoritmo de Dijkstra
-#         (quando o grafo tem pesos)
-
-# 		Parameters
-# 		----------
-# 		:param o: Nodo de origem
-# 		:param d: Nodo de destino
-# 		"""
-#         if not self._check_valid(o) or not self._check_valid(d):
-#             print("Caminho inválido")
-#             return []
-#         else:
-#             djkstr = {k: ["", 0] for k in self.graph} # djkstr[k][0] -> nodo anterior; djkstr[k][1] -> distância ao nodo inicial
-#             nxt = [(o,o,0)] #Lista ordenada de valores por avaliar (nodo, nodo anterior, distância ao nodo inicial)
-#             checked = [o] #Valores já avaliados
-#             while len(nxt) != 0:
-#                 node,prev,dist = nxt.pop(0)
-#                 djkstr[node] = [prev, dist]
-                
-#                 if node == d:
-#                     return self.__get_path(djkstr, o, d)
-                
-#                 temp = [elem[0] for elem in nxt] #Para retirar apenas os nodos da lista de tuplos
-#                 new_elems = [ (k, node, math.inf) for k in self.graph[node] if k not in [*checked] ]
-#                 nxt += self.__get_mins(dist, new_elems)
-#                 nxt = sorted(nxt, key = lambda x: x[2])
-#                 checked.append(node)
-#             return []
-        
-    
-    
+                return False    
     
 
-## cycles
+    ## cycles
+
     def node_has_cycle (self, v:str) -> bool:
         """
         Verifica se um nodo tem um caminho que forma um ciclo
@@ -618,99 +537,3 @@ class MyGraph:
         for v in self.graph.keys():
             if self.node_has_cycle(v): return True
         return False
-
-
-
-# def is_in_tuple_list (tl, val):
-#     res = False
-#     for (x,y) in tl:
-#         if val == x: return True
-#     return res
-
-
-def test1():
-    gr = MyGraph( {1:{2:0}, 2:{3:3}, 3:{2:1,4:2}, 4:{2:0}}, w=True )
-    print(gr.graph)
-    # gr.print_graph()
-    # print (gr.get_nodes())
-    # print (gr.get_edges())
-    # gr.dijkstra_distance(2, 4)
-    # gr.add_vertex(5)
-
-
-    
-
-def test2():
-    gr2 = MyGraph(w=True)
-    gr2.add_vertex(1)
-    gr2.add_vertex(2)
-    gr2.add_vertex(3)
-    gr2.add_vertex(4)
-    
-    gr2.add_edge(1,2)
-    gr2.add_edge(2,3)
-    gr2.add_edge(3,2)
-    gr2.add_edge(3,4)
-    gr2.add_edge(4,2)
-    
-    gr2.print_graph()
-  
-def test3():
-    gr = MyGraph({1:{2:0}, 2:{3:0}, 3:{2:0,4:0}, 4:{2:0}})
-    gr.print_graph()
-
-    # print (gr.get_successors(2))
-    # print (gr.get_predecessors(2))
-    print (gr.get_adjacents(2))
-    print (gr.in_degree(2))
-    print (gr.out_degree(2))
-    print (gr.degree(2))
-
-def test4():
-    # gr = MyGraph( {1:{2:0}, 2:{3:3}, 3:{2:1,4:2}, 4:{2:0}}, w=True )
-    
-    # print (gr.distance(1,4))
-    # print (gr.distance(4,3))
-
-    # print (gr.shortest_path(1,4))
-    # print (gr.shortest_path(4,3))
-
-    # # print (gr.reachable_with_dist(1))
-    # # print (gr.reachable_with_dist(3))
-
-    gr2 = MyGraph( {1:{2:0}, 2:{3:0}, 3:{2:0,4:0}, 4:{2:0}} )
-    
-    print (gr2.distance(2,1))
-    print (gr2.distance(1,5))
-    
-    print (gr2.shortest_path(1,4))
-    print (gr2.shortest_path(2,1))
-
-    print (gr2.reachable_with_dist(1))
-    # print (gr2.reachable_with_dist(5))
-
-def test5():
-    gr = MyGraph( {1:{2:0}, 2:{3:0}, 3:{2:0,4:0}, 4:{2:0}} )
-    print (gr.node_has_cycle(2))
-    print (gr. node_has_cycle(1))
-    print (gr.has_cycle())
-
-    # gr2 = MyGraph( {1:[2,3], 2:[4], 3:[5], 4:[], 5:[]} )
-    # print (gr2. node_has_cycle(1))
-    # print (gr2.has_cycle())
-    
-    
-def test6():
-    gr = MyGraph( {1:{2:2, 3:5}, 2:{1:2, 3:3, 4:1, 5:2}, 3:{1:5, 2:3, 4:1, 5:2},
-                   4:{2:1, 3:1, 5:2, 6:7}, 5:{2:2, 3:2, 4:2, 6:3}, 6:{4:7, 5:3}}, w=True)
-    
-    print(gr.shortest_path(1, 6))
-
-
-if __name__ == "__main__":
-    #test1()
-    #test2()
-    #test3()
-    test4()
-    #test5()
-    #test6()

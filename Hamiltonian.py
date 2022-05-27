@@ -110,12 +110,3 @@ class Hamiltonian:
 				out += node[len_kmers-1]
 		else: out = "ERRO: Não existe qualquer circuito Hamiltoniano!"
 		return out
-
-if __name__ == "__main__":
-	kmers1 = ['ATG', 'TGC', 'GCG', 'CGT', 'GTA', 'TAG', 'AGT', 'GTG', 'TGC', 'GCA', 'CAG', 'AGT', 'GTG', 'TGT', 'GTA', 'TAC', 'ACA', 'CAC']
-	# kmers1 = ['ATG','TGC','GCG','CGT','GTA','TAG','AGT','GTG','TGC','GCA','CAG','AGT','GTG','TGT','GTA','TAC','ACA','CAC'] + ['ACT']
-	hm = Hamiltonian(kmers1)
-	print(hm)
-	print(f"Graph: {hm.graph}")
-	print(f"Hamiltonian: {hm.hamiltonian()}")
-	print(f"Rebuild sequence: {hm.rebuild_seq()}")

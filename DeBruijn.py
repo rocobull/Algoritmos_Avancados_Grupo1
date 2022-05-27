@@ -215,15 +215,3 @@ class DeBruijn:
 		else:
 			out = "ERRO: O grafo não é Euleriano!"
 		return out
-
-
-if __name__ == "__main__":
-	# para a geração de um grafo com dois nodos semi-balanceados (out_deg-in_deg == 1 && out_deg-in_deg == -1)
-	# kmers = ['ATG','TGC','GCG','CGT','GTA','TAG','AGT','GTG','TGC','GCA','CAG','AGT','GTG','TGT','GTA','TAC','ACA','CAC']
-	# para a geração de um grafo em que um dos nodos de destino não é key do dicionário
-	kmers = ['ATG','TGC','GCG','CGT','GTA','TAG','AGT','GTG','TGC','GCA','CAG','AGT','GTG','TGT','GTA','TAC','ACA','CAC'] + ['ACT']
-	# para a geração de um grafo em que todos os nodos são balanceados (kmers[0][:-1] == kmers[-1][1:])
-	# kmers = ['ATG','TGC','GCG','CGT','GTA','TAG','AGT','GTG','TGC','GCA','CAG','AGT','GTG','TGT','GTA','TAC','ACA','CAT']
-	dbr = DeBruijn(kmers)
-	print(dbr)
-	print(f"sequences: {dbr.rebuild_seqs()}")
