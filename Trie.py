@@ -1,14 +1,8 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Mar 14 00:12:37 2022
-
-@author: rober
-"""
 
 """
 Class: Trie
 """
-
 
 import pprint
 import re
@@ -182,18 +176,4 @@ class Trie:
                 if self.check_pat(frag):
                     result.append((frag,ix))
         return result
-        
-    
-
-if __name__ == "__main__":
-    x = Trie()
-    x.add_pats(["ACGT","AAAAAT", "T", "CGAT", "TA"])
-    #print()
-    #print(x.trie_matches("CGATTACTATCGACGACATCATGC"))
-    #print()
-    #print(x)
-    x.rm_pats("X")
-    x.rm_pats(["xxxx", "CGAT"])
-    x.dic
-    #print(x)
-    print(x.trie_matches("ATCGAGCAAAAATAGCGAT"))
+       
