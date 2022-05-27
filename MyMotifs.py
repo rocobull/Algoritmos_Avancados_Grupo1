@@ -155,34 +155,4 @@ class MyMotifs:
                 maximo = p
                 maxind = k
         return maxind
-
-
-def test():
-    # test
-    from MySeq import MySeq
-    seq1 = MySeq("ATAAGTT")
-    seq2 = MySeq("ATAAGTT")
-    seq3 = MySeq("TTGGcGT")
-    seq4 = MySeq("GACCCGT")
-    #seq5 = MySeq("AACCAT")
-    #seq6 = MySeq("AACCCT")
-    #seq7 = MySeq("AAACCT")
-    #seq8 = MySeq("GAACCT")
-    lseqs = [seq1, seq2, seq3, seq4]
-    print(len(lseqs[0]))
-    motifs = MyMotifs(lseqs, 0.5)
-    #printMat (motifs.counts)
-    printMat (motifs.counts)
-    print()
-    print(motifs.alphabet)
     
-    print(motifs.probabSeq("AATACCT"))
-    print(motifs.probAllPositions("ATAAGTT"))
-    print()
-    print(motifs.mostProbableSeq("AACATACACTTACATC"))
-    print("------------------------")
-    print(motifs.consensus())
-    print(motifs.maskedConsensus())
-
-if __name__ == '__main__':
-    test()
