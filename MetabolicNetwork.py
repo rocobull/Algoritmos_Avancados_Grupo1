@@ -2,6 +2,10 @@
 
 from MyGraph import MyGraph
 
+"""
+Class: MetabolicNetwork
+"""
+
 class MetabolicNetwork (MyGraph):
     """
     Classe que guarda redes metabólicas em estruturas de grafos
@@ -250,7 +254,6 @@ class MetabolicNetwork (MyGraph):
         tot = 0
         num_reachable = 0
         for k in self.graph.keys():
-            print(k)
             distsk = self.reachable_with_dist(k)
             for _, dist in distsk:
                 tot += dist
