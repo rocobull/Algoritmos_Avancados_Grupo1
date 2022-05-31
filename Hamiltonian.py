@@ -4,6 +4,10 @@ from typing import Union
 
 class Hamiltonian:
 
+	"""
+	Implementa um algoritmo para a reconstrução de sequências através de circuitos Hamiltonianos.
+	"""
+
 	def __init__(self, kmers: list) -> None:
 		"""
 		Inicializa uma instância da classe Hamiltonian, guardando uma lista de k-mers introduzida pelo utilizador e
