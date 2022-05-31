@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Class: Entity
-"""
-
 import random
 
 class Entity:
@@ -23,7 +19,6 @@ class Entity:
 		:param lb: O limite inferior dos números reais que representam os "genes" do indivíduo
 		:param ub: O limite superior dos números reais que representam os "genes" do indivíduo
 		"""
-
 		self.size = size
 		self.genes = genes
 		self.lb, self.ub = lb, ub
@@ -32,16 +27,12 @@ class Entity:
 		if not self.genes:
 			self.genes = [random.uniform(lb, ub) for i in range(size*4)]
 
-"""
-Class: Evolutionary
-"""
 
 class Evolutionary:
 
 	"""
 	Implementa um algoritmo evolucionário para a procura de motifs num conjunto de sequências de DNA.
 	"""
-	
 
 	def __init__(self, num_indivs: int, size_indiv: int, num_iter: int, alignment: str) -> None:
 		"""
@@ -54,23 +45,33 @@ class Evolutionary:
 		:param num_iter: Número de iterações a efetuar pelo algoritmo evolucionário
 		:param alignment: O alinhamento de sequências no qual se pretende procurar motifs
 		"""
-		if type(num_indivs) != int:
-			raise TypeError("O num_indivs deve ser do tipo inteiro")
+
+		if type(num_indivs) is not int:
+			raise TypeError("O parâmetro 'num_indivs' deve ser do tipo 'int'.")
 		
-		if type(size_indiv) != int:
-			raise TypeError("O size_indiv deve ser do tipo inteiro")
+		if type(size_indiv) is not int:
+			raise TypeError("O parâmetro 'size_indiv' deve ser do tipo 'int'.")
 		
-		if type(num_iter) != int:
-			raise TypeError("O num_iter deve ser do tipo inteiro")
+		if type(num_iter) is not int:
+			raise TypeError("O parâmetro 'num_iter' deve ser do tipo 'int'.")
 		
-		if type(alignment) != str:
-			raise TypeError("O alignment deve ser do tipo string")
+		if type(alignment) is not str:
+			raise TypeError("O parâmetro 'alignment' deve ser do tipo 'str'.")
 
 		self.num_indivs = num_indivs
 		self.size_indiv = size_indiv
 		self.population = [Entity(size_indiv, [], 0, 1) for i in range(num_indivs)]
 		self.num_iter = num_iter
 		self.alignment = [line.strip().upper() for line in open(alignment).readlines() if line.strip()]
+
+	def __str__(self) -> str:
+		"""
+		Retorna os motifs representados pelos genes de cada indivíduo da população.
+		"""
+		out = []
+		for i, indiv in enumerate(self.population):
+			out += [f"{i+1}: {self.__get_best_seq(self.__get_pwm(indiv))}"]
+		return ", ".join(out)
 
 
 	########## AVALIAR OS INDIVÍDUOS DA POPULAÇÃO ##########
@@ -107,7 +108,7 @@ class Evolutionary:
 		best_seq = ""
 		for col in pwm:
 			sorted_values = sorted(col.items(), key = lambda x: x[1])
-			best_seq += sorted_values[0][0]
+			best_seq += sorted_values[-1][0]
 		return best_seq
 
 	def __get_indiv_attr(self, seq: str) -> tuple:
@@ -142,8 +143,6 @@ class Evolutionary:
 			pwm = self.__get_pwm(indiv)
 			best_seq = self.__get_best_seq(pwm)
 			indiv.fitness, indiv.positions = self.__get_indiv_attr(best_seq)
-			print(f"Score: {indiv.fitness} | Positions: {indiv.positions}") # retirar: apenas para visualização
-		print("") # retirar
 
 
 	########## PROVOCAR MUTAÇÕES, RECOMBINAR INDIVÍDUOS, E GERAR NOVA POPULAÇÃO ##########
@@ -198,12 +197,24 @@ class Evolutionary:
 
 	########## CORRER ALGORITMO EVOLUCIONÁRIO, E EXTRAÍR MOTIFS DAS SEQUÊNCIAS ##########
 
+	def __is_max(self) -> bool:
+		"""
+		Caso algum indivíduo da população tenha obtido o score máximo, retorna True. Caso contrário, retorna False.
+		"""
+		res = False
+		for indiv in self.population:
+			if indiv.fitness == 2 * self.size_indiv * len(self.alignment):
+				res = True
+				break
+		return res
+
 	def __run_ea(self) -> None:
 		"""
 		Corre o algoritmo evolucionário.
 		"""
 		for i in range(self.num_iter):
 			self.__evaluate()
+			if self.__is_max(): break
 			self.__new_population()
 
 	def get_motifs(self) -> list:

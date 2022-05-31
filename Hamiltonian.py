@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Class: Hamiltonian
-"""
-
 from typing import Union
 
 class Hamiltonian:
@@ -103,14 +99,16 @@ class Hamiltonian:
 
 	def rebuild_seq(self) -> str:
 		"""
-		Reconstrói a sequência original a partir de um caminho Hamiltoniano. Caso não exista qualquer caminho Hamiltoniano
-		no grafo, retorna uma mensagem de erro.
+		Reconstrói a sequência original a partir de um caminho Hamiltoniano. Caso o grafo não seja válido ou não exista qualquer 
+		caminho Hamiltoniano no mesmo, retorna uma mensagem de erro.
 		"""
-		path = self.hamiltonian()
-		if path:
-			len_kmers = len(self.kmers[0])
-			out = path[0][:len_kmers]
-			for node in path[1:]:
-				out += node[len_kmers-1]
-		else: out = "ERRO: Não existe qualquer circuito Hamiltoniano!"
+		if self.validate_graph():
+			path = self.hamiltonian()
+			if path:
+				len_kmers = len(self.kmers[0])
+				out = path[0][:len_kmers]
+				for node in path[1:]:
+					out += node[len_kmers-1]
+			else: out = "ERRO: Não existe qualquer circuito Hamiltoniano!"
+		else: out = "ERRO: O grafo não contém todos os fragmentos, e/ou contém fragmentos repetidos!"
 		return out

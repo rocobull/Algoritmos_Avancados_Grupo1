@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Class: DeBruijn
-"""
-
 from typing import Union
 
 class DeBruijn:
@@ -14,7 +10,8 @@ class DeBruijn:
 
 	def __init__(self, kmers: list) -> None:
 		"""
-		Inicializa uma instância da classe DeBruijn, guardando os k-mers introduzidos pelo utilizador.
+		Inicializa uma instância da classe DeBruijn, guardando os k-mers introduzidos pelo utilizador, o grafo de
+		DeBruijn construído a partir dos mesmos, e o número de nodos "ignorados" aquando da construção do grafo.
 
 		Parameters
 		----------
@@ -30,12 +27,13 @@ class DeBruijn:
 
 		self.kmers = sorted([kmer.upper() for kmer in kmers])
 		self.de_bruijn = self.get_de_bruijn()
+		self.ignored_nodes = self.get_ignored_nodes()
 
 	def __str__(self) -> str:
 		"""
-		Imprime os k-mers introduzidos pelo utilizador.
+		Imprime os k-mers introduzidos pelo utilizador ordenados lexicograficamente.
 		"""
-		return f"Fragmentos: {str(self.kmers)}"
+		return f"Fragmentos: {', '.join(self.kmers)}"
 
 
 	########## CONSTRUÇÃO DO GRAFO ##########
@@ -54,9 +52,8 @@ class DeBruijn:
 		que o compõem.
 
 		de_bruijn = {"aa": {"ab": 1, "ac": 2},
-					 "bb": {"ba": 3, "bc": 2}}
-					 "cc": {"ca": 2, "cb": 1}}} 
-
+					 "bb": {"ba": 3, "bc": 2},
+					 "cc": {"ca": 2, "cb": 1}}
 		"""
 		nodes = self.get_nodes()
 		de_bruijn = {}
@@ -66,14 +63,20 @@ class DeBruijn:
 			else:
 				if to in de_bruijn[fr]: de_bruijn[fr][to] += 1
 				else: de_bruijn[fr][to] = 1
-		# verificar se todos os nodos são keys do grafo
-		nodes_list = [node for tup in nodes for node in tup]
-		for node in nodes_list:
-			if node not in de_bruijn: de_bruijn[node] = {"?": 0}
 		return de_bruijn
 
+	def get_ignored_nodes(self) -> int:
+		"""
+		Retorna o número de nodos no grafo de DeBruijn que são destino, mas não são origem.
+		"""
+		nodes = [node for tup in self.get_nodes() for node in tup]
+		ignored_nodes = 0
+		for node in nodes:
+			if node not in self.de_bruijn: ignored_nodes += 1
+		return ignored_nodes
 
-	########## VALIDAÇÃO, EMPARELHAMENTO DE NODOS NÃO BALANCEADOS, E DETERMINAÇÃO DE ORIGENS ##########
+
+	########## DETERMINAÇÃO DOS GRAUS PARA A VALIDAÇÃO DO GRAFO E DETERMINAÇÃO DOS PONTOS DE PARTIDA ##########
 
 	def get_out_degree(self, node: str) -> int:
 		"""
@@ -117,39 +120,23 @@ class DeBruijn:
 			if out_deg > in_deg: begin += 1
 			elif out_deg < in_deg: end += 1
 		# verificar condição "nº de nodos com (out_deg-in_deg==1) == nº de nodos com (out_deg-in_deg==-1)"
-		if begin != end: res = False
+		# "+ self.ignored_nodes" porque todos os nodos ignorados têm mais um grau de entrada que de saída
+		if begin != (end + self.ignored_nodes): res = False
 		return res
 
-	def get_unbalanced(self) -> Union[list, bool]:
+	def get_origins(self) -> Union[list, bool]:
 		"""
 		Caso o grafo seja Euleriano, retorna uma lista com as origens dos contigs. Caso contrário, retorna False.
 		"""
 		valid = self.validate_eulerian()
 		if valid:
-			starts, ends = [], []
+			out = []
 			for node in self.de_bruijn:
 				out_deg, in_deg = self.get_out_degree(node), self.get_in_degree(node)
-				if out_deg - in_deg == 1: starts += [node]
-				if in_deg - out_deg == 1: ends += [node]
-			if not starts: starts += [list(self.de_bruijn.keys())[0]] # caso todos os nodos sejam balanceados
-		else: return valid
-		return starts, ends
-
-	def pair_unbalanced(self, starts: list, ends: list) -> None:
-		"""
-		Emparelha os nodos não balanceados do grafo.
-
-		Parameters
-		----------
-		:param starts: Uma lista de nodos que apresentam um maior grau de saída que de entrada
-		:param ends: Uma lista de nodos que apresentam um maior grau de entrada que de saída
-		"""
-		for end, start in zip(ends, starts):
-			if list(self.de_bruijn[end].keys())[0] == "?":
-				self.de_bruijn[end] = {start: 1}
-			else:
-				if start in self.de_bruijn[end]: self.de_bruijn[end][start] += 1
-				else: self.de_bruijn[end][start] = 1
+				if out_deg - in_deg == 1: out += [node]
+			if not out: out += [list(self.de_bruijn.keys())[0]] # caso todos os nodos sejam balanceados
+		else: out = valid
+		return out
 
 
 	########## RECONSTRUÇÃO DA(S) SEQUÊNCIA(S) ##########
@@ -191,30 +178,35 @@ class DeBruijn:
 		Caso o grafo seja Euleriano, retorna uma lista contendo todos os contigs reconstruídos. Caso contrário, 
 		retorna uma mensagem de erro.  
 		"""
-		unbalanced = self.get_unbalanced()
-		if unbalanced:
-			starts, ends = unbalanced
-			self.pair_unbalanced(starts, ends)
-			self.dbr_copy = {k1: {k2: v for k2, v in self.de_bruijn[k1].items()} for k1 in self.de_bruijn} # cópia
+		self.dbr_copy = {k1: {k2: v for k2, v in self.de_bruijn[k1].items()} for k1 in self.de_bruijn} # cópia
+		origins = self.get_origins() # origins == False caso o grafo não seja Euleriano
+		if origins:
 			contigs = []
-			while starts:
-				nodes = [starts.pop(0)]
+			# enquanto houver origens
+			while origins:
+				# o nodo de origem é atualizado sempre que se inicia o processo de reconstrução de um contig
+				nodes = [origins.pop(0)]
+				# enquanto houver arcos no grafo
 				while self.dbr_copy:
+					# procurar nodo na lista de nodos que seja uma chave do grafo (caso não exista, tem-se um 
+					# contig -> break ***)
 					found = False
 					for i, node in enumerate(nodes):
 						if node in list(self.dbr_copy.keys()):
 							curr = node
 							found = True
 							break
-					if not found: break
+					if not found: break # ***
+					# construção de uma laçada e incorporação na lista de nodos que irá formar o contig
 					loop = self.get_loop(curr)
 					nodes.insert(i+1, loop)
 					nodes = self.flat_list(nodes)
+				# reconstrução do contig (todos os caracteres do primeiro nodo + último caractere dos nodos seguintes)
 				contig = nodes[0]
 				for node in nodes[1:]:
 					contig += node[-1]
-				if len(contig) > len(self.kmers) + 2: contigs += [contig[:-1]]
-				else: contigs += [contig]
+				# adicionar o contig reconstruído à lista de contigs
+				contigs += [contig]
 			out = contigs
 		else:
 			out = "ERRO: O grafo não é Euleriano!"
