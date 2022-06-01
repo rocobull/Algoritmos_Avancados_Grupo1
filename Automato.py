@@ -27,6 +27,18 @@ class Automato:
         self.mat = {num:{} for num in range(len(self.pattern))}
         self.transicoes()
         
+    def __str__(self):
+        """
+        Imprime o Automato de forma legível (matriz)
+        """
+        res = "\t".join(["State", *self.alpha])
+        for k in self.mat:
+            line = [str(k)]
+            for al in self.alpha:
+                line.append(str(self.mat[k][al]))
+            res += "\n" + line[0] + "\t\t" + "\t".join(line[1:])
+        return res
+        
         
     def new_state(self, key:int, part:str):
         """
@@ -42,7 +54,7 @@ class Automato:
         state = 0
         for sub in [part[ind:] for ind in range(1,key+2)]:
             if " "+sub in self.parts:
-                state = self.parts.index(" "+sub)
+                state = self.parts.index(" " + sub)
                 break
             
         self.mat[key][part[-1]] = state
@@ -87,15 +99,3 @@ class Automato:
             if state == len(self.pattern)-1:
                 results.append( ind - len(self.pattern) + 2 )
         return results
-    
-    
-    def print_automato(self):
-        """
-        Imprime o Automato de forma legível (matriz)
-        """
-        print("\t".join(["State", *self.alpha]))
-        for k in self.mat:
-            line = [str(k)]
-            for al in self.alpha:
-                line.append(str(self.mat[k][al]))
-            print(line[0] + "\t\t" + "\t".join(line[1:]))

@@ -188,8 +188,7 @@ class MetabolicNetwork (MyGraph):
                 for s2 in sucs_r:
                     if r != s2: self.add_edge(r, s2)
 
-
-
+    
     def all_degrees (self, deg_type:str = "inout") -> dict:
         """
         Devolve um dicionário com os graus desejados
@@ -223,7 +222,7 @@ class MetabolicNetwork (MyGraph):
         :param deg_type: Define o tipo de graus a serem calculados ('in', 'out' ou 'inout')
         """
         degs = self.all_degrees(deg_type)
-        return sum(degs.values()) / float(len(degs))
+        return round(sum(degs.values()) / float(len(degs)), 4)
     
     
     def prob_degree (self, deg_type:str = "inout") -> dict:
@@ -242,7 +241,7 @@ class MetabolicNetwork (MyGraph):
             else:
                 res[degs[k]] = 1
         for k in res.keys():
-            res[k] /= float(len(degs))
+            res[k] = round(res[k] / float(len(degs)), 4)
         return res
     
     
@@ -259,8 +258,7 @@ class MetabolicNetwork (MyGraph):
                 tot += dist
             num_reachable += len(distsk)
         meandist = float(tot) / num_reachable
-        n = len(self.get_nodes())
-        return meandist, float(num_reachable)/((n-1)*n)
+        return round(meandist, 4)
     
     
     def clustering_coef(self, v:str) -> float:
@@ -317,13 +315,10 @@ class MetabolicNetwork (MyGraph):
         for k in degs_k.keys():
             tot = 0
             for v in degs_k[k]: tot += ccs[v]
-            ck[k] = float(tot) / len(degs_k[k])
+            ck[k] = round(float(tot) / len(degs_k[k]), 4)
         return ck
     
     
-    
-    
-    # PORTFOLIO #
     
     def reacoes_ativas(self, all_subs:list):
         """
@@ -333,13 +328,13 @@ class MetabolicNetwork (MyGraph):
         ----------
         :param all_subs: Lista de substratos
         """
-        if self.net_type == "metabolite-reaction":
+        if self.net_type != "metabolite-reaction":
             return []
 
         active = []
         for r in self.node_types["reaction"]:
             pred = self.get_predecessors(r)
-            if all(pred) in all_subs:
+            if all([p in all_subs for p in pred]):
                 active.append(r)
         return active
     
@@ -353,7 +348,7 @@ class MetabolicNetwork (MyGraph):
         ----------
         :param active_r: Lista de reações ativas
         """
-        if self.net_type == "metabolite-reaction":
+        if self.net_type != "metabolite-reaction":
             return []
         
         result = []
@@ -371,14 +366,14 @@ class MetabolicNetwork (MyGraph):
         ----------
         :param met_iniciais: Lista de metabolitos iniciais
         """
-        if len(met_iniciais) == 0 or self.net_type == "metabolite-reaction":
+        if len(met_iniciais) == 0 or self.net_type != "metabolite-reaction":
             return []
         
         final = []
         while True:
             active_r = self.reacoes_ativas(met_iniciais)
             met_prod = self.metabolitos_produzidos(active_r)
-            if (len(met_prod) != 0) and (not all(met_prod) in final):
+            if (len(met_prod) != 0) and (not all([m in final for m in met_prod])):
                 for met in met_prod:
                     if met not in final:
                         final.append(met)
@@ -387,3 +382,4 @@ class MetabolicNetwork (MyGraph):
                 break
         return final
 
+ 

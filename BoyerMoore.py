@@ -29,11 +29,7 @@ class BoyerMoore:
         
         self.bcr()
         self.gsr()
-        #print(self.salto_bcr)
-        #print()
-        #print(self.salto_gsr)
         
-    
     
     
     def bcr(self):
@@ -73,7 +69,7 @@ class BoyerMoore:
                 check_list = re.findall(fr"(?=({dots}))", self.pat)
                 check_list = check_list[:-1]
                 if frag in check_list:
-                    salto = check_list[::-1].index(frag) + len(sub) - len(frag) + 1 #Para alinhar com a correspondência
+                    salto = check_list[::-1].index(frag) + 1 #Para alinhar com a correspondência
                     break
                     
             self.salto_gsr[sub] = salto
@@ -116,3 +112,5 @@ class BoyerMoore:
                     ind += max(self.salto_bcr[mismatch][letra], self.salto_gsr[suffix])
                     
         return results
+
+
