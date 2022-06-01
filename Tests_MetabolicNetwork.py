@@ -49,16 +49,23 @@ class TestMetabolic(unittest.TestCase):
     
     
     def test_file(self):
+        
+        #Conteúdos do ficheiro "temp.txt":
+            #r1: m1 + m2 => m3
+            #r2: m1 + m3 => m4 + m5
+            #r3: m6 + m7 <=> m1 + m8
+            #r4: m9 <=> m10 + m10
+        
         #METABOLITOS E REAÇÕES
         test = MetabolicNetwork("metabolite-reaction", False)
         test.load_from_file("temp.txt")
         
         self.assertEqual(test.get_nodes_type(), [['m1', 'm2', 'm3', 'm4', 'm5', 'm6', 'm7', 'm8', 'm9', 'm10'],
                                                   ['r1', 'r2', 'r3', 'r4']])
-        self.assertEqual(test.mean_degree("inout"), 1.8571428571428572)
-        self.assertEqual(test.prob_degree("inout"), {3: 0.14285714285714285, 1: 0.5714285714285714,
-                                                      2: 0.14285714285714285, 4: 0.14285714285714285})
-        self.assertEqual(test.mean_distances(), (2.230769230769231, 0.35714285714285715))
+        self.assertEqual(test.mean_degree("inout"), 1.8571)
+        self.assertEqual(test.prob_degree("inout"), {3: 0.1429, 1: 0.5714,
+                                                      2: 0.1429, 4: 0.1429})
+        self.assertEqual(test.mean_distances(), 2.2308)
         self.assertEqual(test.mean_clustering_perdegree("inout"), {3: 0.0, 1: 0.0, 2: 0.0, 4: 0.0})
         self.assertEqual(test.metabolitos_finais(["qualquercoisa"]), [])
         
@@ -78,7 +85,7 @@ class TestMetabolic(unittest.TestCase):
         #REAÇÕES
         test = MetabolicNetwork("reaction-reaction", True)
         test.load_from_file("temp.txt")
-        self.assertEqual(test.prob_degree("inout"), {2: 0.3333333333333333, 3: 0.16666666666666666, 1: 0.5})
+        self.assertEqual(test.prob_degree("inout"), {2: 0.3333, 3: 0.1667, 1: 0.5})
         self.assertEqual(test.get_nodes_type(), ['r1', 'r2', 'r3', 'r3_b', 'r4', 'r4_b']) #Testagem com reações reversas em separado
         
         
